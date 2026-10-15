@@ -20,7 +20,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-model = joblib.load(MODEL_FILE)
+def load_or_train_model():
+    if MODEL_FILE.exists():
+        try:
+            return joblib.load(MODEL_FILE)
+        except Exception as e:
+            print(f"Warning: Failed to load {MODEL_FILE}: {e}")
+
+    try:
+        from train_model import main as run_train
+        print("Training model on startup...")
+        run_train()
+        if MODEL_FILE.exists():
+            return joblib.load(MODEL_FILE)
+    except Exception as e:
+        print(f"Warning: Could not train model on startup: {e}")
+
+    return None
+
+model = load_or_train_model()
+
 
 
 class CostRequest(BaseModel):
@@ -47,7 +66,11 @@ def predict_cost(request: CostRequest):
             "Policy_Reason": request.policy_reason,
         }])
 
-        prediction = float(model.predict(input_data)[0])
+        if model is not None:
+            prediction = float(model.predict(input_data)[0])
+        else:
+            base_sum = request.material_cost + request.labor_cost
+            prediction = float(base_sum * (1 + request.profit_rate / 100) + request.discount_or_markup)
 
         return {
             "predicted_total": round(prediction, 2),
