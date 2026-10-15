@@ -51,11 +51,13 @@ class CostRequest(BaseModel):
 
 
 @app.get("/")
+@app.get("/api")
 def home():
     return {"message": "Smart Home Builder ML API is running"}
 
 
 @app.post("/predict")
+@app.post("/api/predict")
 def predict_cost(request: CostRequest):
     try:
         input_data = pd.DataFrame([{
