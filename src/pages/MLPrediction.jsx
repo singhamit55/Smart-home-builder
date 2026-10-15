@@ -30,7 +30,7 @@ export default function MLPrediction() {
             ? `${import.meta.env.VITE_API_URL.replace(/\/+$/, "")}/predict`
             : (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
                 ? "http://127.0.0.1:8000/predict"
-                : "/api/predict";
+                : "https://smart-home-builder.onrender.com/predict";
 
         try {
             const response = await fetch(apiUrl, {
