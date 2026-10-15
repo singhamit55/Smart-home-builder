@@ -1,0 +1,15 @@
+{
+  "records_trained": 1000,
+  "r2_score": 0.9969648304276028,
+  "mae": 635.8795233286576,
+  "rmse": 936.0965402468394,
+  "features": [
+    "Material_Cost",
+    "Labor_Cost",
+    "Profit_Rate",
+    "Discount_or_Markup",
+    "Policy_Reason"
+  ],
+  "target": "Total_Estimate",
+  "dataset_type": "Verify whether records are synthetic or real."
+}
